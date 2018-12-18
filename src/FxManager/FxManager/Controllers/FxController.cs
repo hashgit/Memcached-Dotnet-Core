@@ -29,7 +29,8 @@ namespace FxManager.Controllers
                 var response = await _fxService.GetRate(request.BaseCurrency, request.TargetCurrency);
                 return response;
             }
-            catch (ArgumentOutOfRangeException e)
+
+            catch (ArgumentException e)
             {
                 return BadRequest(e.Message);
             }

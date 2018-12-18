@@ -30,6 +30,9 @@ namespace FxManager.Services
             if (!_systemConfiguration.IsCurrencySupported(targetCurrency))
                 throw new ArgumentOutOfRangeException(targetCurrency, "Unsupported currency");
 
+            if (string.Equals(baseCurrency, targetCurrency))
+                throw new ArgumentException("Base and target currencies cannot be the same");
+
             var rate = await _fixerService.GetRate(baseCurrency, targetCurrency);
 
             return new FxResponse {BaseCurrency = baseCurrency, TargetCurrency = targetCurrency, ExchangeRate = Math.Round(rate.Rate, _systemConfiguration.Round), Timestamp = rate.Timestamp };

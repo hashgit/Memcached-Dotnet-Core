@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FxManager.Models;
 using FxManager.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FxManager.Controllers
@@ -23,9 +24,19 @@ namespace FxManager.Controllers
         [HttpGet]
         public ActionResult<FxResponse> Get([FromQuery] FxRequest request)
         {
-            var response = _fxService.GetRate(request.BaseCurrency, request.TargetCurrency);
-
-            return response;
+            try
+            {
+                var response = _fxService.GetRate(request.BaseCurrency, request.TargetCurrency);
+                return response;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ namespace FxManager.Services
     {
         IEnumerable<string> GetCurrencies();
         bool IsCurrencySupported(string currency);
+        int Round { get; }
     }
 
     public class SystemConfiguration : ISystemConfiguration
@@ -14,10 +15,14 @@ namespace FxManager.Services
         private readonly IConfiguration _configuration;
         private readonly HashSet<string> _supportedCurrencies = new HashSet<string>();
 
+        public int Round { get; }
+
         public SystemConfiguration(IConfiguration configuration)
         {
             _configuration = configuration;
             BuildSupportedCurrenciesMap();
+
+            Round = configuration.GetValue<int?>("Rounding") ?? 5;
         }
 
         private void BuildSupportedCurrenciesMap()

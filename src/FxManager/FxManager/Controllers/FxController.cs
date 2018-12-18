@@ -22,11 +22,11 @@ namespace FxManager.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<FxResponse> Get([FromQuery] FxRequest request)
+        public async Task<ActionResult<FxResponse>> Get([FromQuery] FxRequest request)
         {
             try
             {
-                var response = _fxService.GetRate(request.BaseCurrency, request.TargetCurrency);
+                var response = await _fxService.GetRate(request.BaseCurrency, request.TargetCurrency);
                 return response;
             }
             catch (ArgumentOutOfRangeException e)

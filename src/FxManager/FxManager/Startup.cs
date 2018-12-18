@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FxManager.Cache;
 using FxManager.Services;
+using FxManager.Services.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,9 @@ namespace FxManager
         {
             services.AddSingleton<ISystemConfiguration, SystemConfiguration>();
             services.AddScoped<IFxService, FxService>();
+            services.AddScoped<IFixerService, FixerService>();
+            services.AddScoped<ICacheProvider, CacheProvider>();
+            services.AddScoped<IFixerHttp, FixerHttp>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

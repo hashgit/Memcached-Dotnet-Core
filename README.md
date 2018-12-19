@@ -1,3 +1,7 @@
+# Startup
+
+The Api endpoint is /api/Fx?baseCurrency={}&targetCurrency={}
+
 # Assumptions
 
 No assumptions have been made during the service. All parameters are configurable through appsettings.json file.

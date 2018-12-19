@@ -32,6 +32,7 @@ namespace FxManager
             services.AddScoped<IFixerService, FixerService>();
             services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IFixerHttp, FixerHttp>();
+            services.AddEnyimMemcached();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -43,6 +44,7 @@ namespace FxManager
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseEnyimMemcached();
             app.UseMvc();
         }
     }

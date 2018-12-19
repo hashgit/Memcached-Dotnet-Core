@@ -25,23 +25,25 @@ namespace FxManager.Services
         public async Task<FxRate> GetRate(string baseCurrency, string targetCurrency)
         {
             var key = $"{baseCurrency}-{targetCurrency}";
-            var cached = _cacheProvider.TryGet(key);
-            if (cached != null)
-            {
-                return new FxRate { Rate = 1, Timestamp = DateTime.Now};
-            }
-            else
-            {
-                var fixerRate = await _fixerHttp.GetRate(baseCurrency, targetCurrency);
-                var baseRate = fixerRate.Rates[baseCurrency];
-                var targetRate = fixerRate.Rates[targetCurrency];
+            var fixerRate = await _cacheProvider.TryGet(key, async () => await _fixerHttp.GetRate(baseCurrency, targetCurrency));
 
-                var rate = baseRate / targetRate;
-                var start = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                var date = start.AddSeconds(fixerRate.Timestamp).ToLocalTime();
-
-                return new FxRate {Rate = rate, Timestamp = date};
+            if (fixerRate == null)
+            {
+                throw new CurrencyNotFoundException("Rates not available");
             }
+
+            decimal baseRate = 0, targetRate = 0;
+            if (!fixerRate.Rates?.TryGetValue(baseCurrency, out baseRate) ?? true)
+                throw new CurrencyNotFoundException($"{baseCurrency} not found");
+
+            if (!fixerRate.Rates?.TryGetValue(targetCurrency, out targetRate) ?? true)
+                throw new CurrencyNotFoundException($"{targetCurrency} not found");
+
+            var rate = baseRate / targetRate;
+            var start = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var date = start.AddSeconds(fixerRate.Timestamp).ToLocalTime();
+
+            return new FxRate {Rate = rate, Timestamp = date};
         }
     }
 }

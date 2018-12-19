@@ -1,4 +1,4 @@
-# Assemptions
+# Assumptions
 
 No assumptions have been made during the service. All parameters are configurable through appsettings.json file.
 Memcached is used for distributed caching.

@@ -1,3 +1,8 @@
+# Assemptions
+
+No assumptions have been made during the service. All parameters are configurable through appsettings.json file.
+Memcached is used for distributed caching.
+
 # Exchange Rate Service
 
 In order for a Bookmaker to see their liabilities in a common currency, An exchange rate microservice is required. This exchange rate service will be responsible for collection and delivery of exchange rate values to internal clients. 

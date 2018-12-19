@@ -31,11 +31,11 @@ namespace FxManager.Controllers
             }
             catch (CurrencyNotFoundException e)
             {
-                return NotFound(e.Message);
+                return NotFound(new { e.Message });
             }
             catch (ArgumentException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { e.Message });
             }
             catch (Exception)
             {
